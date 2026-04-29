@@ -1,124 +1,130 @@
-﻿# Benchmarking Text Encoding Strategies for Surgical Duration Prediction
+---
+title: Benchmarking-Text-Encoding-Strategies
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+---
 
-This repository benchmarks multiple text encoding strategies for predicting surgical case duration.
-It compares structured-only baselines, classical text features, and BERT-based embeddings across multiple regression models.
+<div align="center">
 
-## What this project does
+<h1>🔬 Benchmarking Text Encoding Strategies</h1>
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=3b82f6&center=true&vCenter=true&width=700&lines=Surgical+Duration+Prediction+Benchmark;BERT+%2B+Classical+NLP+%2B+Structured+Baselines;K-Fold+%7C+Hospital+CV+%7C+Temporal+CV" alt="Typing SVG"/>
 
-- Builds a cleaned tabular dataset from raw surgical case data.
-- Generates text representations using:
-	- Structured only baseline
-	- Label encoding
-	- Count vectorization
-	- TF-IDF
-	- ClinicalBERT embeddings
-	- Sentence-BERT embeddings
-- Trains and evaluates several models:
-	- Linear Regression
-	- Ridge
-	- Lasso
-	- Random Forest
-	- XGBoost
-	- MLP (TensorFlow/Keras)
-- Reports metrics including MAE, SMAPE, R2, RMSE, training time, and inference time.
-- Supports both standard K-Fold CV and alternative Hospital/Temporal CV strategies.
+<br/>
 
-## Repository structure
+[![Python](https://img.shields.io/badge/Python-3.10+-3b82f6?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.x-4f46e5?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-3b82f6?style=for-the-badge&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Spaces-ffcc00?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/mnoorchenar/spaces)
+[![Status](https://img.shields.io/badge/Status-Active-22c55e?style=for-the-badge)](#)
 
-```text
-.
-|-- pipeline.py                # Main 4-stage pipeline (K-Fold workflow)
-|-- pipeline_cv.py             # Alternative CV pipeline (hospital + temporal)
-|-- dashboard.py               # Flask + Plotly interactive dashboard
-|-- OverLeaf.ipynb             # Figure generation notebook for publication-ready plots
-|-- data/
-|   |-- casetime.csv           # Input dataset
-|   |-- bert_cache/            # Cached BERT embeddings (.npy)
-|-- results/                   # Outputs for pipeline.py
-|-- results_hospital/          # Outputs for hospital CV
-|-- results_temporal/          # Outputs for temporal CV
-|-- overleaf/                  # Exported PDF figures/logs from notebook
-|-- sync.ps1                   # Optional git sync helper script
+<br/>
+
+**🔬 Benchmarking Text Encoding Strategies** — A surgical duration prediction benchmark comparing structured baselines, classical text features, and BERT-based embeddings across multiple ML models and cross-validation strategies.
+
+<br/>
+
+---
+
+</div>
+
+## Table of Contents
+
+- [Features](#-features)
+- [Architecture](#️-architecture)
+- [Getting Started](#-getting-started)
+- [Dashboard](#-dashboard)
+- [Dashboard Modules](#-dashboard-modules)
+- [ML Models](#-ml-models)
+- [Project Structure](#-project-structure)
+- [Outputs & Artifacts](#-outputs--artifacts)
+- [Reproducibility](#-reproducibility)
+- [Author](#-author)
+- [Contributing](#-contributing)
+- [Disclaimer](#disclaimer)
+- [License](#-license)
+
+---
+
+## ✨ Features
+
+<table>
+  <tr>
+    <td>📝 <b>Text Encoding Strategies</b></td>
+    <td>Structured-only baseline, Label Encoding, Count Vectorization, TF-IDF, ClinicalBERT, and Sentence-BERT embeddings</td>
+  </tr>
+  <tr>
+    <td>🤖 <b>Multiple ML Models</b></td>
+    <td>Linear Regression, Ridge, Lasso, Random Forest, XGBoost, and MLP (TensorFlow/Keras)</td>
+  </tr>
+  <tr>
+    <td>📊 <b>Flexible CV Strategies</b></td>
+    <td>Standard K-Fold, Hospital leave-one-location-out CV, and Temporal expanding-window CV</td>
+  </tr>
+  <tr>
+    <td>📈 <b>Comprehensive Metrics</b></td>
+    <td>MAE, SMAPE, R², RMSE, training time, and inference time reported per model and encoding</td>
+  </tr>
+  <tr>
+    <td>🖥️ <b>Interactive Dashboard</b></td>
+    <td>Flask + Plotly dashboard for exploring and comparing benchmark results interactively</td>
+  </tr>
+  <tr>
+    <td>📄 <b>Publication-Ready Figures</b></td>
+    <td>Jupyter notebook exports sensitivity plots and legend PDFs directly to <code>overleaf/</code></td>
+  </tr>
+</table>
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│       Benchmarking Text Encoding Strategies             │
+│                                                         │
+│  ┌───────────┐    ┌───────────┐    ┌───────────────┐  │
+│  │  Surgical │───▶│  Text     │───▶│  Regression   │  │
+│  │  Case Data│    │  Encoding │    │   Models      │  │
+│  └───────────┘    └───────────┘    └───────┬───────┘  │
+│                                            │           │
+│                                   ┌────────▼────────┐  │
+│                                   │  Flask + Plotly  │  │
+│                                   │   Dashboard     │  │
+│                                   └─────────────────┘  │
+└─────────────────────────────────────────────────────────┘
 ```
 
-## Pipeline overview
+---
 
-### `pipeline.py` (main workflow)
+## 🚀 Getting Started
 
-The script is interactive and organized into four stages:
+### Prerequisites
 
-1. Stage 01 - Pre-processing
-	 - Reads `data/casetime.csv`
-	 - Writes cleaned data and fold indices into `data/surgical_data.db`
-2. Stage 02 - BERT cache
-	 - Creates reusable embedding caches under `data/bert_cache/`
-3. Stage 03 - Fold encoding
-	 - Performs fold-safe imputation/encoding
-	 - Applies PCA to BERT embeddings per fold (train-only)
-	 - Saves encoded matrices in `data/fold_encoded.db`
-4. Stage 04 - Modeling
-	 - Tunes, trains, and evaluates selected models
-	 - Saves metrics/artifacts in `results/result.db` and `results/*.log`, `results/*.pdf`
+- Python 3.10+
+- Git
 
-Notes:
-- Stages 01-03 auto-skip when already complete.
-- Stage 04 always prompts for model selection.
-
-### `pipeline_cv.py` (alternative CV workflow)
-
-Adds two CV strategies on top of the cleaned dataset:
-
-- Hospital CV: leave-one-location-out style split
-- Temporal CV: expanding time-series split
-
-It writes separate outputs:
-
-- Encoded DBs: `data/fold_encoded_hospital.db`, `data/fold_encoded_temporal.db`
-- Results DBs: `results_hospital/result.db`, `results_temporal/result.db`
-- Logs/plots in `results_hospital/` and `results_temporal/`
-
-Prerequisites for `pipeline_cv.py`:
-
-- `pipeline.py` Stage 01 completed
-- BERT cache available (from `pipeline.py` Stage 02)
-
-## Requirements
-
-Python 3.10+ is recommended.
-
-Core libraries used by this project include:
-
-- numpy
-- pandas
-- scipy
-- scikit-learn
-- optuna
-- xgboost
-- tensorflow
-- torch
-- transformers
-- sentence-transformers
-- matplotlib
-- flask
-- plotly (loaded via CDN in dashboard frontend)
-
-Example install command:
+### Local Installation
 
 ```bash
+# 1. Clone the repository
+git clone https://github.com/mnoorchenar/Benchmarking-Text-Encoding-Strategies.git
+cd Benchmarking-Text-Encoding-Strategies
+
+# 2. Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# 3. Install dependencies
 pip install numpy pandas scipy scikit-learn optuna xgboost tensorflow torch transformers sentence-transformers matplotlib flask
-```
 
-## How to run
-
-### 1) Main benchmark pipeline
-
-```bash
+# 4. Run the main benchmark pipeline
 python pipeline.py
 ```
 
 You will be prompted to run selected stages (or all stages by default).
 
-### 2) Alternative CV experiments
+### Alternative CV Experiments
 
 ```bash
 python pipeline_cv.py
@@ -126,52 +132,160 @@ python pipeline_cv.py
 
 You will be prompted for stage selection, CV strategy, and models.
 
-### 3) Dashboard
+> **Note:** `pipeline.py` Stage 01 and the BERT cache (Stage 02) must be completed before running `pipeline_cv.py`.
+
+---
+
+## 📊 Dashboard
 
 ```bash
 python dashboard.py
 ```
 
-Then open:
+Then open `http://localhost:5050` in your browser. The dashboard reads from `results/result.db`.
 
-- `http://localhost:5050`
+---
 
-The dashboard reads from `results/result.db`.
+## 📋 Dashboard Modules
 
-### 4) Publication figures
+| Module | Description | Status |
+|--------|-------------|--------|
+| 📊 Results Explorer | Browse and compare model metrics across encoding strategies | ✅ Live |
+| 🏥 Hospital CV | Leave-one-location-out cross-validation results | ✅ Live |
+| 📅 Temporal CV | Expanding time-series split results | ✅ Live |
+| 🔬 Sensitivity Analysis | Sensitivity plots for publication | ✅ Live |
+| 📄 Model Comparison | Side-by-side encoding strategy comparison | ✅ Live |
+| 📑 Publication Figures | Export PDF figures via `OverLeaf.ipynb` | 🗓️ Notebook |
 
-Open and run `OverLeaf.ipynb` to export sensitivity plots and legend PDFs into `overleaf/`.
+---
 
-## Outputs and artifacts
+## 🧠 ML Models
 
-Main outputs you can expect:
+```python
+# Models benchmarked in this project
+models = {
+    "linear_regression": "sklearn LinearRegression",
+    "ridge":             "sklearn Ridge",
+    "lasso":             "sklearn Lasso",
+    "random_forest":     "sklearn RandomForestRegressor",
+    "xgboost":           "xgboost XGBRegressor",
+    "mlp":               "TensorFlow/Keras Sequential (MLP)"
+}
+```
 
-- Databases
-	- `data/surgical_data.db`
-	- `data/fold_encoded.db`
-	- `results/result.db`
-	- `results_hospital/result.db`
-	- `results_temporal/result.db`
-- Logs
-	- Stage logs: `results/*.log`, `results_hospital/*.log`, `results_temporal/*.log`
-- Figures
-	- Model comparison PDFs in results folders
-	- Sensitivity analysis PDFs in `overleaf/`
+---
 
-## Reproducibility notes
+## 📁 Project Structure
+
+```
+Benchmarking-Text-Encoding-Strategies/
+│
+├── 📄 pipeline.py              # Main 4-stage pipeline (K-Fold workflow)
+├── 📄 pipeline_cv.py           # Alternative CV pipeline (hospital + temporal)
+├── 📄 dashboard.py             # Flask + Plotly interactive dashboard
+├── 📄 OverLeaf.ipynb           # Figure generation notebook for publication-ready plots
+│
+├── 📂 data/
+│   ├── 📄 casetime.csv         # Input dataset
+│   └── 📂 bert_cache/          # Cached BERT embeddings (.npy)
+│
+├── 📂 results/                 # Outputs for pipeline.py (result.db, logs, PDFs)
+├── 📂 results_hospital/        # Outputs for hospital CV
+├── 📂 results_temporal/        # Outputs for temporal CV
+├── 📂 overleaf/                # Exported PDF figures/logs from notebook
+└── 📄 sync.ps1                 # Optional git sync helper script
+```
+
+---
+
+## 📦 Outputs & Artifacts
+
+Main outputs generated by the pipelines:
+
+- **Databases**
+  - `data/surgical_data.db` — cleaned data and fold indices
+  - `data/fold_encoded.db` — fold-safe encoded feature matrices
+  - `results/result.db`, `results_hospital/result.db`, `results_temporal/result.db` — metrics & artifacts
+- **Logs**
+  - `results/*.log`, `results_hospital/*.log`, `results_temporal/*.log`
+- **Figures**
+  - Model comparison PDFs in results folders
+  - Sensitivity analysis PDFs in `overleaf/`
+
+---
+
+## 🔁 Reproducibility
 
 - Most random operations are configured with fixed seeds in pipeline config blocks.
 - Stage 03 operations are fold-aware to reduce leakage risk.
 - BERT features are cached so repeated runs are faster and consistent.
+- Stages 01–03 auto-skip when already complete; Stage 04 always prompts for model selection.
 
-## Data and privacy
+---
 
-Before publishing this repository publicly:
+## 👨‍💻 Author
 
-- Confirm that `data/casetime.csv` is de-identified and approved for sharing.
-- Verify no sensitive artifacts are present in generated databases/logs.
-- Consider adding a `.gitignore` policy for large outputs and local DB files if needed.
+<div align="center">
 
-## Optional helper script
+<table>
+<tr>
+<td align="center" width="100%">
 
-`sync.ps1` is a convenience script for local git workflow automation (index generation, add/commit/pull/push). Review it before use, especially in collaborative branches.
+<img src="https://avatars.githubusercontent.com/mnoorchenar" width="120" style="border-radius:50%; border: 3px solid #4f46e5;" alt="Mohammad Noorchenarboo"/>
+
+<h3>Mohammad Noorchenarboo</h3>
+
+<code>Data Scientist</code> &nbsp;|&nbsp; <code>AI Researcher</code> &nbsp;|&nbsp; <code>Biostatistician</code>
+
+📍 &nbsp;Ontario, Canada &nbsp;&nbsp; 📧 &nbsp;[mohammadnoorchenarboo@gmail.com](mailto:mohammadnoorchenarboo@gmail.com)
+
+──────────────────────────────────────
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mnoorchenar)&nbsp;
+[![Personal Site](https://img.shields.io/badge/Website-mnoorchenar.github.io-4f46e5?style=for-the-badge&logo=githubpages&logoColor=white)](https://mnoorchenar.github.io/)&nbsp;
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-ffcc00?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/mnoorchenar/spaces)&nbsp;
+[![Google Scholar](https://img.shields.io/badge/Scholar-4285F4?style=for-the-badge&logo=googlescholar&logoColor=white)](https://scholar.google.ca/citations?user=nn_Toq0AAAAJ&hl=en)&nbsp;
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mnoorchenar)
+
+</td>
+</tr>
+</table>
+
+</div>
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. **Commit** your changes: `git commit -m 'Add amazing feature'`
+4. **Push** to the branch: `git push origin feature/amazing-feature`
+5. **Open** a Pull Request
+
+---
+
+## Disclaimer
+
+<span style="color:red">This project is developed strictly for educational and research purposes and does not constitute professional advice of any kind. All datasets used are either synthetically generated or publicly available — no real user data is stored. Before publishing this repository publicly, confirm that <code>data/casetime.csv</code> is de-identified and approved for sharing, and verify no sensitive artifacts are present in generated databases or logs. This software is provided "as is" without warranty of any kind; use at your own risk.</span>
+
+---
+
+## 📜 License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
+
+---
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3b82f6,100:4f46e5&height=120&section=footer&text=Made%20with%20%E2%9D%A4%EF%B8%8F%20by%20Mohammad%20Noorchenarboo&fontColor=ffffff&fontSize=18&fontAlignY=80" width="100%"/>
+
+[![GitHub Stars](https://img.shields.io/github/stars/mnoorchenar/Benchmarking-Text-Encoding-Strategies?style=social)](https://github.com/mnoorchenar/Benchmarking-Text-Encoding-Strategies)
+[![GitHub Forks](https://img.shields.io/github/forks/mnoorchenar/Benchmarking-Text-Encoding-Strategies?style=social)](https://github.com/mnoorchenar/Benchmarking-Text-Encoding-Strategies/fork)
+
+<sub>This project is developed purely for academic and research purposes. Any similarity to existing company names, products, or trademarks is entirely coincidental and unintentional. This project has no affiliation with any commercial entity.</sub>
+
+</div>
