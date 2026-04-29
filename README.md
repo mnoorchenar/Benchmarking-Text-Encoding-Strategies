@@ -79,21 +79,30 @@ sdk: docker
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│       Benchmarking Text Encoding Strategies             │
-│                                                         │
-│  ┌───────────┐    ┌───────────┐    ┌───────────────┐  │
-│  │  Surgical │───▶│  Text     │───▶│  Regression   │  │
-│  │  Case Data│    │  Encoding │    │   Models      │  │
-│  └───────────┘    └───────────┘    └───────┬───────┘  │
-│                                            │           │
-│                                   ┌────────▼────────┐  │
-│                                   │  Flask + Plotly  │  │
-│                                   │   Dashboard     │  │
-│                                   └─────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-```
+<div align="center">
+<svg width="600" height="205" viewBox="0 0 600 205" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="205" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="300" y="27" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#1e293b">Benchmarking Text Encoding Strategies</text>
+  <rect x="20" y="42" width="140" height="55" rx="8" fill="#3b82f6"/>
+  <text x="90" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="white">Surgical</text>
+  <text x="90" y="84" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#bfdbfe">Case Data</text>
+  <rect x="205" y="42" width="130" height="55" rx="8" fill="#4f46e5"/>
+  <text x="270" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="white">Text</text>
+  <text x="270" y="84" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#c7d2fe">Encoding</text>
+  <rect x="380" y="42" width="150" height="55" rx="8" fill="#0ea5e9"/>
+  <text x="455" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="white">Regression</text>
+  <text x="455" y="84" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#bae6fd">Models</text>
+  <rect x="380" y="140" width="150" height="55" rx="8" fill="#7c3aed"/>
+  <text x="455" y="164" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="white">Flask + Plotly</text>
+  <text x="455" y="182" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#ede9fe">Dashboard</text>
+  <line x1="160" y1="69" x2="197" y2="69" stroke="#64748b" stroke-width="1.5"/>
+  <polygon points="197,65 205,69 197,73" fill="#64748b"/>
+  <line x1="335" y1="69" x2="372" y2="69" stroke="#64748b" stroke-width="1.5"/>
+  <polygon points="372,65 380,69 372,73" fill="#64748b"/>
+  <line x1="455" y1="97" x2="455" y2="132" stroke="#64748b" stroke-width="1.5"/>
+  <polygon points="451,132 455,140 459,132" fill="#64748b"/>
+</svg>
+</div>
 
 ---
 
