@@ -6,3 +6,8 @@
 *.tmp
 *.db
 data/
+# Data files -- keep local only, do not upload to GitHub
+*.csv
+*.db
+*.sqlite
+*.sqlite3
